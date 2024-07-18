@@ -1,20 +1,12 @@
 package main
 
 import (
-	"net/http"
-
-	"github.com/openzoosim/ozs-web/config"
-	"github.com/openzoosim/ozs-web/database"
-	"github.com/openzoosim/ozs-web/routers"
+	"github.com/openzoosim/ozs-web/cmd"
+	logger "github.com/openzoosim/ozs-web/internal/logging"
 )
 
 func main() {
-
-	config := config.LoadEnvVars()
-
-	database.InitializeDBConnection(config.DBConnectionString)
-
-	r := routers.LoadRouters()
-
-	http.ListenAndServe(":3000", r)
+	logger.InitializeLogger()
+	logger.Log.Info("Logger is initialized!")
+	cmd.CommandHandler()
 }

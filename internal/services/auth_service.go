@@ -1,13 +1,14 @@
-package api_auth
+package services
 
 import (
 	"context"
 	"fmt"
 
-	"github.com/openzoosim/ozs-web/database"
+	"github.com/openzoosim/ozs-web/internal/database"
+	"github.com/openzoosim/ozs-web/internal/models"
 )
 
-func CreateNewUser(newUser NewUserRequest) {
+func CreateNewUser(newUser models.NewUserRequest) {
 	sql := `
 		INSERT INTO public.users (
 			email,

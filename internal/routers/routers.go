@@ -1,7 +1,6 @@
 package routers
 
 import (
-	"fmt"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -10,9 +9,8 @@ import (
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
-	api_auth "github.com/openzoosim/ozs-web/api/auth"
-	"github.com/openzoosim/ozs-web/config"
-	"github.com/openzoosim/ozs-web/database"
+	"github.com/openzoosim/ozs-web/internal/models"
+	"github.com/openzoosim/ozs-web/internal/services"
 )
 
 type PageData struct {
@@ -44,18 +42,18 @@ func LoadRouters() *chi.Mux {
 		}
 
 		// Execute the template with data
-		
+
 		if err := tmpl.ExecuteTemplate(w, "base", data); err != nil {
 			http.Error(w, "Unable to execute template", http.StatusInternalServerError)
 		}
 	})
 
-	r.Get("/test", func(w http.ResponseWriter, r *http.Request) {
-		database.CreateStagedMessage("This is a test message!")
-		w.Write([]byte(fmt.Sprintf("welcome %s", config.AppConfiguration.DBConnectionString)))
-	})
+	// r.Get("/test", func(w http.ResponseWriter, r *http.Request) {
+	// 	database.CreateStagedMessage("This is a test message!")
+	// 	w.Write([]byte(fmt.Sprintf("welcome %s", config.AppConfiguration.DBConnectionString)))
+	// })
 
-	r.Get("/register", api_auth.RegisterNewUser)
+	r.Get("/register", RegisterNewUser)
 	return r
 }
 
@@ -76,4 +74,10 @@ func FileServer(r chi.Router, path string, root http.FileSystem) {
 		fs := http.StripPrefix(pathPrefix, http.FileServer(root))
 		fs.ServeHTTP(w, r)
 	})
+}
+
+func RegisterNewUser(w http.ResponseWriter, r *http.Request) {
+	newUser := &models.NewUserRequest{Email: "ddl@chicken@.com", Username: "MZERO", Password: "12345"}
+	services.CreateNewUser(*newUser)
+	w.Write([]byte("DONE"))
 }

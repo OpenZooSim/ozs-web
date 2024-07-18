@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/jackc/pgx/v5"
+	logger "github.com/openzoosim/ozs-web/internal/logging"
 )
 
 var DB *pgx.Conn
@@ -16,6 +17,6 @@ func InitializeDBConnection(connectionString string) {
 		fmt.Fprintf(os.Stderr, "Unable to connect to database: %v\n", err)
 		os.Exit(1)
 	}
-	fmt.Print("Database is connected!")
+	logger.Log.Info("Database is connected!")
 	DB = conn
 }
