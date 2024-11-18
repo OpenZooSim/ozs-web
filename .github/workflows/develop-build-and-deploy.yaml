@@ -1,0 +1,27 @@
+name: Develop Build and Deploy
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  build_and_push_and_deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repo
+        uses: actions/checkout@v2
+      - name: Build image
+        run: docker build -t registry.digitalocean.com/vt-registry/vt-api:${{ github.sha }} .
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+      - name: Log in to DO Container Registry
+        run: doctl registry login --expiry-seconds 600
+      - name: Push image to DO Container Registry
+        run: docker push registry.digitalocean.com/vt-registry/vt-api:${{ github.sha }}
+      - name: Init KubeCTL
+        run: doctl kubernetes cluster kubeconfig save vt-k8s-cluster
+      - name: Update API Deployment
+        run: kubectl set image deployment vt-api vt-api=registry.digitalocean.com/vt-registry/vt-api:${{ github.sha }} -n dev
