@@ -33,6 +33,7 @@ To view more about how the builds work--you can view the `.github/workflows` YAM
 You should install all of these tools.
 - [NodeJS](https://nodejs.org/en) with [Typescript](https://www.typescriptlang.org/)
 - [ExpressJS](https://expressjs.com/) Web Framework
+- [EJS](https://ejs.co/) Templating Engine
 - [TSyringe](https://github.com/microsoft/tsyringe) DI Container
 - [JEST](https://jestjs.io/) Unit Testing
 - [PostgreSQL](https://www.postgresql.org/) Database
@@ -40,6 +41,11 @@ You should install all of these tools.
 - [SendGrid](https://sendgrid.com/en-us) Email Provider
 - [Digital Ocean](https://www.digitalocean.com/) Cloud Provider using [Kubernetes](https://kubernetes.io/) & [Docker](https://www.docker.com/)
    - [Digital Ocean CLI Tool](https://docs.digitalocean.com/reference/doctl/)
+
+A few other useful notes about the architecture:
+- On the **backend** we are taking advantage of Typescript to provide a more robust and type-safe experience.
+- On the **frontend** we are using EJS to provide a more dynamic and flexible templating engine--but writing all the frontend in plain HTML/CSS/JS.
+   - I had considered using something like Angular or Vue, but I felt that it was overkill for the simplicity of the app.
 
 ### Digital-Ocean-Infrastructure
 
